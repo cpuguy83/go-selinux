@@ -118,7 +118,10 @@ func SocketLabel() (string, error) {
 // SetKeyLabel takes a process label and tells the kernel to assign the
 // label to the next kernel keyring that gets created
 func SetKeyLabel(processLabel string) error {
-	return selinux.SetKeyLabel(processLabel)
+	if selinux.GetEnabled() && processLabel != "" {
+		return selinux.SetKeyLabel(processLabel)
+	}
+	return nil
 }
 
 // KeyLabel retrieves the current default kernel keyring label setting
